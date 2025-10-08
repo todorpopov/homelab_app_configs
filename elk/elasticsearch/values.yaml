@@ -1,0 +1,45 @@
+clusterName: "elasticsearch-single"
+nodeGroup: "master"
+
+replicas: 1
+minimumMasterNodes: 1
+
+esConfig:
+  elasticsearch.yml: |
+    cluster.name: "elasticsearch-single"
+    network.host: 0.0.0.0
+    node.store.allow_mmap: false
+    cluster.initial_master_nodes: ["elasticsearch-single-master-0"]
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512Mi"
+  limits:
+    cpu: "1"
+    memory: "1Gi"
+
+volumeClaimTemplate:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 5Gi
+
+securityContext:
+  runAsUser: 1000
+  fsGroup: 1000
+
+service:
+  type: ClusterIP
+  port: 9200
+  annotations: {}
+
+podAntiAffinity: "none"
+
+extraEnvs:
+  - name: "ES_JAVA_OPTS"
+    value: "-Xms512m -Xmx512m"
+
+metrics:
+  enabled: false
+
