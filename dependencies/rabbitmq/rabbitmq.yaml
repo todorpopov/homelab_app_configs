@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: dependencies
+spec:
+  type: NodePort
+  ports:
+  - port: 5672
+    targetPort: 5672
+    nodePort: 30003
+    name: amqp
+  - port: 15672
+    targetPort: 15672
+    nodePort: 30004
+    name: management
+  selector:
+    app: rabbitmq
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-data
+  namespace: dependencies
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: dependencies
+spec:
+  serviceName: rabbitmq
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          value: "admin"
+        - name: RABBITMQ_DEFAULT_PASS
+          value: "admin"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      volumes:
+      - name: rabbitmq-data
+        persistentVolumeClaim:
+          claimName: rabbitmq-data
+

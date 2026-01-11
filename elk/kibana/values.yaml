@@ -1,0 +1,32 @@
+elasticsearchHosts: "http://elasticsearch-master:9200"
+
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+securityContext:
+  runAsUser: 1000
+  fsGroup: 1000
+
+service:
+  type: NodePort
+  nodePort: 30601
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  storageClass: local-path
+
+extraEnvs:
+  - name: SERVER_PUBLICBASEURL
+    value: "http://localhost:5601"
+  - name: SERVER_NAME
+    value: "kibana-single"
+
