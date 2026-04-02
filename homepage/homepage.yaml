@@ -31,30 +31,36 @@ data:
         - TailScale:
             href: https://login.tailscale.com/admin/machines
             description: Manage TailScale devices
+            icon: tailscale.png
         - Kubernetes Dashboard:
             href: https://infra:30005/#/workloads?namespace=default
             description: View and manage Kubernetes resources
             ping: http://infra:30005
-        - Registry:
+            icon: kubernetes-dashboard.png
+        - Registry UI:
             href: http://infra:30501
             description: In-cluster Docker registry
             ping: http://infra:30501
-        - RabbitMQ Management:
+            icon: docker.png
+        - RabbitMQ UI:
             href: http://infra:30004/#/
             description: Manage RabbitMQ
             ping: http://infra:30004
+            icon: rabbitmq.png
             username: admin
             password: admin
 
-    - My Second Group:
-        - My Second Service:
-            href: http://localhost/
-            description: Homepage is the best
-
-    - My Third Group:
-        - My Third Service:
-            href: http://localhost/
-            description: Homepage is 😎
+    - Services:
+        - Elasticsearch API:
+            href: http://infra:30007
+            description: Search and analytics engine
+            ping: http://infra:30007
+            icon: elasticsearch.png
+        - Registry API:
+            href: http://infra:30500
+            description: Docker registry backend
+            ping: http://infra:30500/v2/
+            icon: docker.png
   widgets.yaml: |
     - kubernetes:
         cluster:
