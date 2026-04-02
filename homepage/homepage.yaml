@@ -14,7 +14,11 @@ metadata:
 data:
   kubernetes.yaml: |
     mode: cluster
-  settings.yaml: ""
+  settings.yaml: |
+    layout:
+      - Kubernetes Resources:
+          style: row
+          columns: 3
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
@@ -30,12 +34,17 @@ data:
         - Kubernetes Dashboard:
             href: https://infra:30005/#/workloads?namespace=default
             description: View and manage Kubernetes resources
+            ping: http://infra:30005
         - Registry:
             href: http://infra:30501
             description: In-cluster Docker registry
+            ping: http://infra:30501
         - RabbitMQ Management:
             href: http://infra:30004/#/
             description: Manage RabbitMQ
+            ping: http://infra:30004
+            username: admin
+            password: admin
 
     - My Second Group:
         - My Second Service:
@@ -49,11 +58,7 @@ data:
   widgets.yaml: |
     - kubernetes:
         cluster:
-          show: true
-          cpu: true
-          memory: true
-          showLabel: true
-          label: "cluster"
+          show: false
         nodes:
           show: true
           cpu: true
@@ -64,11 +69,81 @@ data:
         expanded: true
         cpu: true
         memory: true
-        network: default
     - search:
         provider: duckduckgo
         target: _blank
   docker.yaml: ""
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: homepage
+  namespace: homepage
+  labels:
+    app.kubernetes.io/name: homepage
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: homepage
+  labels:
+    app.kubernetes.io/name: homepage
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+      - pods
+      - nodes
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/stats
+    verbs:
+      - get
+  - apiGroups:
+      - extensions
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - metrics.k8s.io
+    resources:
+      - nodes
+      - pods
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - statefulsets
+      - daemonsets
+    verbs:
+      - get
+      - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: homepage
+  labels:
+    app.kubernetes.io/name: homepage
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: homepage
+subjects:
+  - kind: ServiceAccount
+    name: homepage
+    namespace: homepage
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -99,6 +174,7 @@ spec:
       labels:
         app: homepage
     spec:
+      serviceAccountName: homepage
       containers:
       - name: homepage
         image: ghcr.io/gethomepage/homepage:latest
