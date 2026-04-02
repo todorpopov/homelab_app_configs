@@ -37,6 +37,11 @@ data:
             description: View and manage Kubernetes resources
             ping: http://infra:30005
             icon: kubernetes-dashboard.png
+        - Kibana:
+            href: http://infra:30008
+            description: Data visualization and exploration
+            ping: http://infra:30008/api/status
+            icon: kibana.png
         - Registry UI:
             href: http://infra:30501
             description: In-cluster Docker registry
