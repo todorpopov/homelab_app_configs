@@ -22,16 +22,22 @@ data:
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
-    - Developer:
-        - Github:
-            - abbr: GH
-              href: https://github.com/
   services.yaml: |
     - Access:
+        - GitHub:
+            href: https://github.com/
+            description: GitHub homepage
+            icon: github.png
         - TailScale:
             href: https://login.tailscale.com/admin/machines
             description: Manage TailScale devices
             icon: tailscale.png
+        - Hetzner Cloud:
+            href: https://console.hetzner.com/projects
+            description: Manage Hetzner Cloud resources
+            icon: hetzner.png
+
+    - UI Services:
         - Kubernetes Dashboard:
             href: https://infra:30005/#/workloads?namespace=default
             description: View and manage Kubernetes resources
@@ -47,7 +53,7 @@ data:
             description: In-cluster Docker registry
             ping: http://infra:30501
             icon: docker.png
-        - RabbitMQ UI:
+        - RabbitMQ Management:
             href: http://infra:30004/#/
             description: Manage RabbitMQ
             ping: http://infra:30004
@@ -55,8 +61,8 @@ data:
             username: admin
             password: admin
 
-    - Services:
-        - Elasticsearch API:
+    - Backend Services:
+        - Elasticsearch:
             href: http://infra:30007
             description: Search and analytics engine
             ping: http://infra:30007
@@ -66,6 +72,20 @@ data:
             description: Docker registry backend
             ping: http://infra:30500/v2/
             icon: docker.png
+
+    - University:
+        - NBU Official Website:
+            href: https://www.nbu.bg
+            description: NBU official website
+        - Moodle:
+            href: https://e-edu.nbu.bg/my/
+            description: Moodle learning platform
+        - E-Student:
+            href: https://student.nbu.bg/Main.aspx
+            description: NBU e-student portal
+        - Email:
+            href: https://mail.nbu.bg/mail/
+            description: NBU email portal
   widgets.yaml: |
     - kubernetes:
         cluster:
