@@ -43,6 +43,11 @@ data:
             description: View and manage Kubernetes resources
             ping: http://infra:30005
             icon: kubernetes-dashboard.png
+        - Grafana:
+            href: http://infra:30010
+            description: Metrics visualization and dashboards
+            ping: http://infra:30010/api/health
+            icon: grafana.png
         - Kibana:
             href: http://infra:30008
             description: Data visualization and exploration
@@ -62,6 +67,11 @@ data:
             password: admin
 
     - Backend Services:
+        - Prometheus:
+            href: http://infra:30009
+            description: Metrics collection and storage
+            ping: http://infra:30009/-/healthy
+            icon: prometheus.png
         - Elasticsearch:
             href: http://infra:30007
             description: Search and analytics engine
