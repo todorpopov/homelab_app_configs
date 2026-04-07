@@ -75,6 +75,21 @@ data:
       static_configs:
       - targets: ['kube-state-metrics.prometheus-stack.svc.cluster.local:8080']
     
+    # Scrape node-exporter
+    - job_name: 'node-exporter'
+      kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - node-exporter
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_endpoints_name]
+        action: keep
+        regex: node-exporter
+      - source_labels: [__meta_kubernetes_endpoint_node_name]
+        action: replace
+        target_label: node
+    
     # Scrape kubelet metrics (pod/container metrics)
     - job_name: 'kubernetes-nodes'
       kubernetes_sd_configs:
