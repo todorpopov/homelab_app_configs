@@ -65,6 +65,11 @@ data:
             icon: rabbitmq.png
             username: admin
             password: admin
+        - Mongo Express:
+            href: http://infra:30012
+            description: MongoDB browser UI
+            ping: http://infra:30012
+            icon: mongodb.png
 
     - Backend Services:
         - Prometheus:
@@ -82,6 +87,11 @@ data:
             description: Docker registry backend
             ping: http://infra:30500/v2/
             icon: docker.png
+        - MongoDB:
+            href: http://infra:30011
+            description: MongoDB instance
+            ping: http://infra:30011
+            icon: mongodb.png
 
     - University:
         - NBU Official Website:
@@ -217,75 +227,75 @@ spec:
     spec:
       serviceAccountName: homepage
       containers:
-      - name: homepage
-        image: ghcr.io/gethomepage/homepage:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 3000
-          name: http
-          protocol: TCP
-        env:
-        - name: HOMEPAGE_ALLOWED_HOSTS
-          value: "*"
-        - name: TZ
-          value: "UTC"
-        - name: HOMEPAGE_VAR_TITLE
-          value: "Homepage"
-        - name: LOG_TARGETS
-          value: "stdout"
-        volumeMounts:
-        - name: config
-          mountPath: /app/config
-        - name: homepage-config
-          mountPath: /app/config/settings.yaml
-          subPath: settings.yaml
-        - name: homepage-config
-          mountPath: /app/config/services.yaml
-          subPath: services.yaml
-        - name: homepage-config
-          mountPath: /app/config/bookmarks.yaml
-          subPath: bookmarks.yaml
-        - name: homepage-config
-          mountPath: /app/config/widgets.yaml
-          subPath: widgets.yaml
-        - name: homepage-config
-          mountPath: /app/config/kubernetes.yaml
-          subPath: kubernetes.yaml
-        - name: homepage-config
-          mountPath: /app/config/docker.yaml
-          subPath: docker.yaml
-        - name: homepage-config
-          mountPath: /app/config/custom.css
-          subPath: custom.css
-        - name: homepage-config
-          mountPath: /app/config/custom.js
-          subPath: custom.js
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 5
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: homepage
+          image: ghcr.io/gethomepage/homepage:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: http
+              protocol: TCP
+          env:
+            - name: HOMEPAGE_ALLOWED_HOSTS
+              value: "*"
+            - name: TZ
+              value: "UTC"
+            - name: HOMEPAGE_VAR_TITLE
+              value: "Homepage"
+            - name: LOG_TARGETS
+              value: "stdout"
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+            - name: homepage-config
+              mountPath: /app/config/settings.yaml
+              subPath: settings.yaml
+            - name: homepage-config
+              mountPath: /app/config/services.yaml
+              subPath: services.yaml
+            - name: homepage-config
+              mountPath: /app/config/bookmarks.yaml
+              subPath: bookmarks.yaml
+            - name: homepage-config
+              mountPath: /app/config/widgets.yaml
+              subPath: widgets.yaml
+            - name: homepage-config
+              mountPath: /app/config/kubernetes.yaml
+              subPath: kubernetes.yaml
+            - name: homepage-config
+              mountPath: /app/config/docker.yaml
+              subPath: docker.yaml
+            - name: homepage-config
+              mountPath: /app/config/custom.css
+              subPath: custom.css
+            - name: homepage-config
+              mountPath: /app/config/custom.js
+              subPath: custom.js
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
       volumes:
-      - name: config
-        persistentVolumeClaim:
-          claimName: homepage-config-pvc
-      - name: homepage-config
-        configMap:
-          name: homepage
+        - name: config
+          persistentVolumeClaim:
+            claimName: homepage-config-pvc
+        - name: homepage-config
+          configMap:
+            name: homepage
 ---
 apiVersion: v1
 kind: Service
@@ -299,8 +309,8 @@ spec:
   selector:
     app: homepage
   ports:
-  - name: http
-    port: 3000
-    targetPort: 3000
-    nodePort: 30006
-    protocol: TCP
+    - name: http
+      port: 3000
+      targetPort: 3000
+      nodePort: 30006
+      protocol: TCP

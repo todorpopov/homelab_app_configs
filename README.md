@@ -81,3 +81,4 @@ kubectl apply -f <directory>/
 ## Maintenance
 
 Last updated: April 8, 2026
+Current highest NodePort: 30012
