@@ -70,6 +70,11 @@ data:
             description: MongoDB browser UI
             ping: http://infra:30012
             icon: mongodb.png
+        - StackPort:
+            href: http://infra:30014
+            description: AWS resource browser for Ministack
+            ping: http://infra:30014
+            icon: aws.png
 
     - Backend Services:
         - Prometheus:
@@ -92,6 +97,11 @@ data:
             description: MongoDB instance
             ping: http://infra:30011
             icon: mongodb.png
+        - Ministack:
+            href: http://infra:30013/_ministack/health
+            description: Local AWS emulator
+            ping: http://infra:30013/_ministack/health
+            icon: aws.png
 
     - University:
         - NBU Official Website:
