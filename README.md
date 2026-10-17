@@ -42,6 +42,8 @@ These services are used for application development and testing.
 
 - **dashboard/** - Kubernetes Dashboard for cluster management
 - **homepage/** - Custom homepage/dashboard
+- **paperless/** - Paperless-ngx document management
+  - `paperless.yaml` - Paperless-ngx (SQLite, uses shared Redis from `dependencies`)
 
 ## Directory Structure
 
@@ -52,7 +54,9 @@ These services are used for application development and testing.
 ├── elastic-stack/
 ├── homepage/
 ├── metrics-server/
+├── ministack/
 ├── node-exporter/
+├── paperless/
 ├── prometheus-stack/
 └── registry/
 ```
@@ -81,4 +85,4 @@ kubectl apply -f <directory>/
 ## Maintenance
 
 Last updated: 2026-10-02
-Current highest NodePort: 30014
+Current highest NodePort: 30015

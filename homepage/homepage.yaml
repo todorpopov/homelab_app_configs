@@ -75,7 +75,11 @@ data:
             description: AWS resource browser for Ministack
             ping: http://infra:30014
             icon: aws.png
-
+        - Paperless:
+            href: http://infra:30015
+            description: Document management
+            ping: http://infra:30015
+            icon: paperless-ngx.png
     - Backend Services:
         - Prometheus:
             href: http://infra:30009
@@ -97,6 +101,11 @@ data:
             description: MongoDB instance
             ping: http://infra:30011
             icon: mongodb.png
+        - Redis:
+            href: http://infra:30002
+            description: Redis instance
+            ping: http://infra:30002
+            icon: redis.png
         - Ministack:
             href: http://infra:30013/_ministack/health
             description: Local AWS emulator
