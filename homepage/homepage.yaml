@@ -16,13 +16,71 @@ data:
     mode: cluster
   settings.yaml: |
     layout:
-      - Kubernetes Resources:
+      - Nodes:
           style: row
-          columns: 3
+          columns: 2
+      - Access:
+      - UI Services:
+      - Backend Services:
+      - University:
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
   services.yaml: |
+    - Nodes:
+        - tpopov:
+            description: Control-plane node
+            icon: mdi-server
+            widget:
+              type: prometheusmetric
+              url: http://prometheus.prometheus-stack.svc.cluster.local:9090
+              refreshInterval: 1000
+              metrics:
+                - label: CPU
+                  query: 100 - (avg(rate(node_cpu_seconds_total{mode="idle",instance="192.168.0.27:9100"}[2m])) * 100)
+                  format:
+                    type: percent
+                - label: Memory
+                  query: 100 * (1 - node_memory_MemAvailable_bytes{instance="192.168.0.27:9100"} / node_memory_MemTotal_bytes{instance="192.168.0.27:9100"})
+                  format:
+                    type: percent
+                - label: Disk
+                  query: 100 * (1 - node_filesystem_avail_bytes{instance="192.168.0.27:9100",mountpoint="/"} / node_filesystem_size_bytes{instance="192.168.0.27:9100",mountpoint="/"})
+                  format:
+                    type: percent
+                - label: CPU Temp
+                  query: max(node_hwmon_temp_celsius{instance="192.168.0.27:9100",chip="platform_coretemp_0"})
+                  format:
+                    type: number
+                    suffix: " °C"
+                    decimals: 0
+        - infra:
+            description: Worker node
+            icon: mdi-server
+            widget:
+              type: prometheusmetric
+              url: http://prometheus.prometheus-stack.svc.cluster.local:9090
+              refreshInterval: 1000
+              metrics:
+                - label: CPU
+                  query: 100 - (avg(rate(node_cpu_seconds_total{mode="idle",instance="192.168.0.20:9100"}[2m])) * 100)
+                  format:
+                    type: percent
+                - label: Memory
+                  query: 100 * (1 - node_memory_MemAvailable_bytes{instance="192.168.0.20:9100"} / node_memory_MemTotal_bytes{instance="192.168.0.20:9100"})
+                  format:
+                    type: percent
+                - label: Disk
+                  query: 100 * (1 - node_filesystem_avail_bytes{instance="192.168.0.20:9100",mountpoint="/"} / node_filesystem_size_bytes{instance="192.168.0.20:9100",mountpoint="/"})
+                  format:
+                    type: percent
+                - label: CPU Temp
+                  query: max(node_hwmon_temp_celsius{instance="192.168.0.20:9100",chip="platform_coretemp_0"})
+                  format:
+                    type: number
+                    suffix: " °C"
+                    decimals: 0
+
     - Access:
         - GitHub:
             href: https://github.com/
@@ -125,23 +183,7 @@ data:
         - Email:
             href: https://mail.nbu.bg/mail/
             description: NBU email portal
-  widgets.yaml: |
-    - kubernetes:
-        cluster:
-          show: false
-        nodes:
-          show: true
-          cpu: true
-          memory: true
-          showLabel: true
-    - resources:
-        backend: resources
-        expanded: true
-        cpu: true
-        memory: true
-    - search:
-        provider: duckduckgo
-        target: _blank
+  widgets.yaml: ""
   docker.yaml: ""
 ---
 apiVersion: v1
