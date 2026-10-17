@@ -81,43 +81,70 @@ data:
           target: ""
           overwrite_keys: true
           add_error_key: true
-      
-    # Processor to add additional metadata
+
+    # Host (system) logs
+    - type: filestream
+      id: host-syslog
+      paths:
+        - /var/log/syslog
+      fields:
+        log_type: host
+        log_file: syslog
+      fields_under_root: true
+
+    - type: filestream
+      id: host-kernlog
+      paths:
+        - /var/log/kern.log
+      fields:
+        log_type: host
+        log_file: kern.log
+      fields_under_root: true
+
+    # Processors applied to all events
     processors:
       - add_cloud_metadata:
       - add_host_metadata:
-      - add_docker_metadata:
 
     # Output to Elasticsearch
     output.elasticsearch:
       hosts: ['http://elasticsearch:9200']
-      # Use ILM (Index Lifecycle Management) to automatically delete old logs
-      ilm.enabled: true
-      ilm.policy_name: "filebeat-retention-policy"
-      ilm.rollover_alias: "filebeat"
-      ilm.pattern: "{now/d}-000001"
 
     # Setup Kibana connection for index pattern creation
     setup.kibana:
       host: "http://kibana:5601"
 
-    # ILM policy configuration - deletes logs older than 14 days
-    setup.ilm.policy:
-      phases:
-        hot:
-          actions:
-            rollover:
-              max_size: "1GB"
-              max_age: "1d"
-        delete:
-          min_age: "14d"
-          actions:
-            delete: {}
+    # Data streams are used by default; retention is handled by an ILM policy
+    setup.ilm.enabled: true
+    setup.ilm.policy_name: "filebeat-retention-policy"
+    setup.ilm.policy_file: /etc/filebeat-ilm-policy.json
+    setup.ilm.overwrite: true
 
     # Logging configuration
     logging.level: info
     logging.to_files: false
     logging.to_stderr: true
+  ilm-policy.json: |-
+    {
+      "policy": {
+        "phases": {
+          "hot": {
+            "actions": {
+              "rollover": {
+                "max_primary_shard_size": "1gb",
+                "max_age": "1d"
+              }
+            }
+          },
+          "delete": {
+            "min_age": "7d",
+            "actions": {
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
 ---
 apiVersion: apps/v1
 kind: DaemonSet
@@ -171,6 +198,10 @@ spec:
           mountPath: /etc/filebeat.yml
           readOnly: true
           subPath: filebeat.yml
+        - name: config
+          mountPath: /etc/filebeat-ilm-policy.json
+          readOnly: true
+          subPath: ilm-policy.json
         - name: data
           mountPath: /usr/share/filebeat/data
         - name: varlibdockercontainers
