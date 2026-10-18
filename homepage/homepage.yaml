@@ -297,7 +297,7 @@ spec:
               protocol: TCP
           env:
             - name: HOMEPAGE_ALLOWED_HOSTS
-              value: "*"
+              value: "homepage.tpopov-homelab.duckdns.org"
             - name: TZ
               value: "UTC"
             - name: HOMEPAGE_VAR_TITLE
@@ -335,12 +335,18 @@ spec:
             httpGet:
               path: /
               port: 3000
+              httpHeaders:
+                - name: Host
+                  value: homepage.tpopov-homelab.duckdns.org
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /
               port: 3000
+              httpHeaders:
+                - name: Host
+                  value: homepage.tpopov-homelab.duckdns.org
             initialDelaySeconds: 10
             periodSeconds: 5
           resources:
@@ -366,12 +372,32 @@ metadata:
   labels:
     app: homepage
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: homepage
   ports:
     - name: http
       port: 3000
       targetPort: 3000
-      nodePort: 30006
       protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homepage
+  namespace: homepage
+  labels:
+    app: homepage
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: homepage.tpopov-homelab.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: homepage
+                port:
+                  number: 3000
