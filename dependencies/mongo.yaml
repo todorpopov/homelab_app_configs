@@ -61,5 +61,20 @@ spec:
   ports:
     - port: 27017
       targetPort: 27017
-      nodePort: 30011
-  type: NodePort
+  type: ClusterIP
+---
+# Plain TCP (no TLS), so the router must match any SNI; the DNS name only resolves to the node.
+# Clients: mongodb://admin:admin@mongo.tpopov-homelab.duckdns.org:27017
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: mongo
+  namespace: dependencies
+spec:
+  entryPoints:
+    - mongo
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: mongo
+          port: 27017
