@@ -107,9 +107,9 @@ data:
             ping: http://infra:30010/api/health
             icon: grafana.png
         - Kibana:
-            href: http://infra:30008
+            href: https://kibana.tpopov-homelab.duckdns.org
             description: Data visualization and exploration
-            ping: http://infra:30008/api/status
+            ping: https://kibana.tpopov-homelab.duckdns.org/api/status
             icon: kibana.png
         - Registry UI:
             href: http://infra:30501

@@ -72,12 +72,37 @@ metadata:
   labels:
     app: kibana
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: kibana
   ports:
   - name: http
     port: 5601
     targetPort: 5601
-    nodePort: 30008
     protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kibana
+  namespace: elastic
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: duckdns
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - kibana.tpopov-homelab.duckdns.org
+  rules:
+    - host: kibana.tpopov-homelab.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kibana
+                port:
+                  number: 5601
