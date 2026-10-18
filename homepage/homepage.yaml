@@ -149,21 +149,6 @@ data:
             description: Search and analytics engine
             ping: http://infra:30007
             icon: elasticsearch.png
-        - Registry API:
-            href: http://infra:30500
-            description: Docker registry backend
-            ping: http://infra:30500/v2/
-            icon: docker.png
-        - MongoDB:
-            href: http://infra:30011
-            description: MongoDB instance
-            ping: http://infra:30011
-            icon: mongodb.png
-        - Redis:
-            href: http://infra:30002
-            description: Redis instance
-            ping: http://infra:30002
-            icon: redis.png
         - Ministack:
             href: http://infra:30013/_ministack/health
             description: Local AWS emulator
