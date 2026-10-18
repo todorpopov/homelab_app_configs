@@ -102,9 +102,9 @@ data:
             ping: https://dashboard.tpopov-homelab.duckdns.org
             icon: kubernetes-dashboard.png
         - Grafana:
-            href: http://infra:30010
+            href: https://grafana.tpopov-homelab.duckdns.org
             description: Metrics visualization and dashboards
-            ping: http://infra:30010/api/health
+            ping: https://grafana.tpopov-homelab.duckdns.org/api/health
             icon: grafana.png
         - Kibana:
             href: https://kibana.tpopov-homelab.duckdns.org
