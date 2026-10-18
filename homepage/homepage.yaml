@@ -112,9 +112,9 @@ data:
             ping: https://kibana.tpopov-homelab.duckdns.org/api/status
             icon: kibana.png
         - Registry UI:
-            href: http://infra:30501
-            description: In-cluster Docker registry
-            ping: http://infra:30501
+            href: https://registry-ui.tpopov-homelab.duckdns.org
+            description: Docker registry browser
+            ping: https://registry-ui.tpopov-homelab.duckdns.org
             icon: docker.png
         - RabbitMQ Management:
             href: https://rabbitmq.tpopov-homelab.duckdns.org/#/

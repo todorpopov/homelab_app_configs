@@ -35,6 +35,8 @@ spec:
               value: "true"
             - name: REGISTRY_HTTP_ADDR
               value: :5000
+            - name: REGISTRY_HTTP_RELATIVEURLS
+              value: "true"
           volumeMounts:
             - name: registry-storage
               mountPath: /var/lib/registry
@@ -54,5 +56,30 @@ spec:
   ports:
     - port: 5000
       targetPort: 5000
-      nodePort: 30500
-  type: NodePort
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: registry
+  namespace: registry
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: duckdns
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - registry.tpopov-homelab.duckdns.org
+  rules:
+    - host: registry.tpopov-homelab.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: registry
+                port:
+                  number: 5000
