@@ -145,9 +145,9 @@ data:
             ping: http://infra:30009/-/healthy
             icon: prometheus.png
         - Elasticsearch:
-            href: http://infra:30007
+            href: https://elasticsearch.tpopov-homelab.duckdns.org
             description: Search and analytics engine
-            ping: http://infra:30007
+            ping: https://elasticsearch.tpopov-homelab.duckdns.org
             icon: elasticsearch.png
         - Ministack:
             href: http://infra:30013/_ministack/health
