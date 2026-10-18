@@ -129,9 +129,9 @@ data:
             ping: https://mongo-express.tpopov-homelab.duckdns.org
             icon: mongodb.png
         - StackPort:
-            href: http://infra:30014
+            href: https://stackport.tpopov-homelab.duckdns.org
             description: AWS resource browser for Ministack
-            ping: http://infra:30014
+            ping: https://stackport.tpopov-homelab.duckdns.org
             icon: aws.png
         - Paperless:
             href: http://infra:30015
@@ -150,9 +150,9 @@ data:
             ping: https://elasticsearch.tpopov-homelab.duckdns.org
             icon: elasticsearch.png
         - Ministack:
-            href: http://infra:30013/_ministack/health
+            href: https://ministack.tpopov-homelab.duckdns.org/_ministack/health
             description: Local AWS emulator
-            ping: http://infra:30013/_ministack/health
+            ping: https://ministack.tpopov-homelab.duckdns.org/_ministack/health
             icon: aws.png
 
     - University:

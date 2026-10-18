@@ -47,9 +47,34 @@ metadata:
 spec:
   selector:
     app: stackport
-  type: NodePort
+  type: ClusterIP
   ports:
     - name: http
       port: 8080
       targetPort: 8080
-      nodePort: 30014
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stackport
+  namespace: ministack
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: duckdns
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - stackport.tpopov-homelab.duckdns.org
+  rules:
+    - host: stackport.tpopov-homelab.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: stackport
+                port:
+                  number: 8080
