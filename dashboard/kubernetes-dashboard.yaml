@@ -88,14 +88,44 @@ kind: Service
 metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
+  annotations:
+    # The dashboard serves HTTPS with a self-signed certificate
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+    traefik.ingress.kubernetes.io/service.serverstransport: kubernetes-dashboard-insecure@kubernetescrd
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     k8s-app: kubernetes-dashboard
   ports:
     - port: 443
       targetPort: 8443
-      nodePort: 30005
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: insecure
+  namespace: kubernetes-dashboard
+spec:
+  insecureSkipVerify: true
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: dashboard.tpopov-homelab.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kubernetes-dashboard
+                port:
+                  number: 443
 ---
 apiVersion: v1
 kind: ServiceAccount

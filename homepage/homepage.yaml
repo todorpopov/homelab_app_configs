@@ -97,9 +97,9 @@ data:
 
     - UI Services:
         - Kubernetes Dashboard:
-            href: https://infra:30005/#/workloads?namespace=default
+            href: http://dashboard.tpopov-homelab.duckdns.org/#/workloads?namespace=default
             description: View and manage Kubernetes resources
-            ping: http://infra:30005
+            ping: http://dashboard.tpopov-homelab.duckdns.org
             icon: kubernetes-dashboard.png
         - Grafana:
             href: http://infra:30010
@@ -277,6 +277,7 @@ metadata:
   labels:
     app: homepage
 spec:
+  revisionHistoryLimit: 0
   replicas: 1
   selector:
     matchLabels:
