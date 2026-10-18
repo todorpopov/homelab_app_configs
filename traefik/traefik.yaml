@@ -31,6 +31,12 @@ spec:
         protocol: TCP
         expose:
           default: true
+      redis:
+        port: 6379
+        exposedPort: 6379
+        protocol: TCP
+        expose:
+          default: true
     env:
       - name: DUCKDNS_TOKEN
         valueFrom:
