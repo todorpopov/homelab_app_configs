@@ -117,9 +117,9 @@ data:
             ping: http://infra:30501
             icon: docker.png
         - RabbitMQ Management:
-            href: http://infra:30004/#/
+            href: https://rabbitmq.tpopov-homelab.duckdns.org/#/
             description: Manage RabbitMQ
-            ping: http://infra:30004
+            ping: https://rabbitmq.tpopov-homelab.duckdns.org
             icon: rabbitmq.png
             username: admin
             password: admin

@@ -4,18 +4,57 @@ metadata:
   name: rabbitmq
   namespace: dependencies
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 5672
     targetPort: 5672
-    nodePort: 30003
     name: amqp
   - port: 15672
     targetPort: 15672
-    nodePort: 30004
     name: management
   selector:
     app: rabbitmq
+---
+# AMQP is plain TCP (no TLS), so the router matches any SNI.
+# Clients: amqp://admin:admin@rabbitmq.tpopov-homelab.duckdns.org:5672
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: rabbitmq-amqp
+  namespace: dependencies
+spec:
+  entryPoints:
+    - amqp
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: rabbitmq
+          port: 5672
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rabbitmq-management
+  namespace: dependencies
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: duckdns
+spec:
+  rules:
+    - host: rabbitmq.tpopov-homelab.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq
+                port:
+                  number: 15672
+  tls:
+    - hosts:
+        - rabbitmq.tpopov-homelab.duckdns.org
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

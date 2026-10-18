@@ -25,6 +25,12 @@ spec:
         protocol: TCP
         expose:
           default: true
+      amqp:
+        port: 5672
+        exposedPort: 5672
+        protocol: TCP
+        expose:
+          default: true
     env:
       - name: DUCKDNS_TOKEN
         valueFrom:
