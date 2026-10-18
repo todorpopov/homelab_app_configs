@@ -140,9 +140,9 @@ data:
             icon: paperless-ngx.png
     - Backend Services:
         - Prometheus:
-            href: http://infra:30009
+            href: https://prometheus.tpopov-homelab.duckdns.org
             description: Metrics collection and storage
-            ping: http://infra:30009/-/healthy
+            ping: https://prometheus.tpopov-homelab.duckdns.org/-/healthy
             icon: prometheus.png
         - Elasticsearch:
             href: https://elasticsearch.tpopov-homelab.duckdns.org
