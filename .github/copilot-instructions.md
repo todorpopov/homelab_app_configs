@@ -35,6 +35,8 @@ For example:
   - node-exporter.yaml: Kubernetes manifest for the Node Exporter application. Used to collect hardware and OS metrics from the nodes.
 - ./paperless
   - paperless.yaml: Kubernetes manifest for Paperless-ngx (document management). Uses SQLite and the shared Redis from the dependencies namespace.
+- ./traefik
+  - traefik.yaml: k3s HelmChartConfig for Traefik ingress, DuckDNS DNS-01 certificates, and HTTP-to-HTTPS redirects. DuckDNS token is managed as a Kubernetes Secret, not in this repository.
 - ./prometheus-stack:
   - grafana.yaml: Kubernetes manifest for the Grafana application.
   - kube-state-metrics.yaml: Kubernetes manifest for the Kube State Metrics service.

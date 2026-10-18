@@ -44,6 +44,7 @@ These services are used for application development and testing.
 - **homepage/** - Custom homepage/dashboard
 - **paperless/** - Paperless-ngx document management
   - `paperless.yaml` - Paperless-ngx (SQLite, uses shared Redis from `dependencies`)
+- **traefik/** - k3s Traefik ingress configuration, DuckDNS ACME certificates and HTTPS redirects
 
 ## Directory Structure
 
@@ -58,7 +59,8 @@ These services are used for application development and testing.
 ├── node-exporter/
 ├── paperless/
 ├── prometheus-stack/
-└── registry/
+├── registry/
+└── traefik/
 ```
 
 ## Usage
@@ -81,6 +83,8 @@ kubectl apply -f <directory>/
 - Check for any ConfigMaps or Secrets that need to be configured separately
 - Review namespace configurations and adjust as needed for your cluster
 - Some services may have dependencies on others (e.g., Filebeat requires Elasticsearch)
+- Traefik's DuckDNS token is supplied separately as the `duckdns-token` Secret in `kube-system`; never commit the token.
+- Traefik obtains Let's Encrypt certificates through DuckDNS DNS-01 for the configured Ingress hostnames. HTTP ingress traffic is redirected to HTTPS.
 
 ## Maintenance
 
