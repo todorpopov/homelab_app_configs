@@ -51,5 +51,30 @@ spec:
   ports:
     - port: 8081
       targetPort: 8081
-      nodePort: 30012
-  type: NodePort
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mongo-express
+  namespace: mongo-express
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: duckdns
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - mongo-express.tpopov-homelab.duckdns.org
+  rules:
+    - host: mongo-express.tpopov-homelab.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mongo-express
+                port:
+                  number: 8081

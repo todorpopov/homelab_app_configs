@@ -124,9 +124,9 @@ data:
             username: admin
             password: admin
         - Mongo Express:
-            href: http://infra:30012
+            href: https://mongo-express.tpopov-homelab.duckdns.org
             description: MongoDB browser UI
-            ping: http://infra:30012
+            ping: https://mongo-express.tpopov-homelab.duckdns.org
             icon: mongodb.png
         - StackPort:
             href: http://infra:30014
