@@ -134,9 +134,9 @@ data:
             ping: https://stackport.tpopov-homelab.duckdns.org
             icon: aws.png
         - Paperless:
-            href: http://infra:30015
+            href: https://paperless.tpopov-homelab.duckdns.org
             description: Document management
-            ping: http://infra:30015
+            ping: https://paperless.tpopov-homelab.duckdns.org
             icon: paperless-ngx.png
     - Backend Services:
         - Prometheus:
