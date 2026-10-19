@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vikunja
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vikunja-data-pvc
+  namespace: vikunja
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vikunja-secret
+  namespace: vikunja
+type: Opaque
+stringData:
+  # Replace with a long random string; keeps user sessions valid across restarts
+  VIKUNJA_SERVICE_JWTSECRET: "change-me-to-a-long-random-string"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vikunja
+  namespace: vikunja
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: vikunja
+  template:
+    metadata:
+      labels:
+        app: vikunja
+    spec:
+      # Service env vars (e.g. VIKUNJA_PORT=tcp://...) would clash with Vikunja settings
+      enableServiceLinks: false
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: vikunja
+          image: vikunja/vikunja:latest
+          ports:
+            - containerPort: 3456
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: VIKUNJA_SERVICE_PUBLICURL
+              value: "https://vikunja.tpopov-homelab.duckdns.org"
+            - name: VIKUNJA_SERVICE_TIMEZONE
+              value: "UTC"
+            - name: VIKUNJA_DATABASE_TYPE
+              value: "sqlite"
+            - name: VIKUNJA_DATABASE_PATH
+              value: "/db/vikunja.db"
+            - name: VIKUNJA_FILES_BASEPATH
+              value: "/app/vikunja/files"
+          envFrom:
+            - secretRef:
+                name: vikunja-secret
+          readinessProbe:
+            httpGet:
+              path: /api/v1/info
+              port: 3456
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /api/v1/info
+              port: 3456
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          volumeMounts:
+            - name: data
+              mountPath: /db
+              subPath: db
+            - name: data
+              mountPath: /app/vikunja/files
+              subPath: files
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: vikunja-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vikunja
+  namespace: vikunja
+  labels:
+    app: vikunja
+spec:
+  type: ClusterIP
+  selector:
+    app: vikunja
+  ports:
+    - name: http
+      port: 3456
+      targetPort: 3456
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vikunja
+  namespace: vikunja
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: duckdns
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - vikunja.tpopov-homelab.duckdns.org
+  rules:
+    - host: vikunja.tpopov-homelab.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vikunja
+                port:
+                  number: 3456

@@ -45,6 +45,11 @@ These services are used for application development and testing.
 - **paperless/** - Paperless-ngx document management
   - `paperless.yaml` - Paperless-ngx (SQLite, uses shared Redis from `dependencies`)
 - **traefik/** - k3s Traefik ingress configuration, DuckDNS ACME certificates and HTTPS redirects
+- **vikunja/** - Vikunja project/task management
+  - `vikunja.yaml` - Vikunja (standalone, SQLite)
+  - default account:
+    - Username: 'admin'
+    - Password: 'adminpass'
 
 ## Directory Structure
 
@@ -60,7 +65,8 @@ These services are used for application development and testing.
 ├── paperless/
 ├── prometheus-stack/
 ├── registry/
-└── traefik/
+├── traefik/
+└── vikunja/
 ```
 
 ## Usage
