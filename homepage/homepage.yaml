@@ -143,6 +143,7 @@ data:
             description: Project and task management
             ping: https://vikunja.tpopov-homelab.duckdns.org
             icon: vikunja.png
+
     - Backend Services:
         - Prometheus:
             href: https://prometheus.tpopov-homelab.duckdns.org
