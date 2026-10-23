@@ -24,8 +24,6 @@ For example:
   - kibana.yaml: Kubernetes manifest for Kibana.
 - ./homepage
   - homepage.yaml: Kubernetes manifest for the Homepage application. All other services/applications are exposed through a link in the homepage dashboard.
-- ./metrics-server
-  - metrics-server.yaml: Kubernetes manifest for Metrics Server. These metrics are exposed through Grafana.
 - ./ministack
   - ministack.yaml: Kubernetes manifest for the Ministack AWS emulator.
   - stackport.yaml: Kubernetes manifest for the Stackport AWS client. Set up to point at the ministack pods.

@@ -95,6 +95,9 @@ spec:
           value: "admin"
         - name: RABBITMQ_DEFAULT_PASS
           value: "admin"
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: /var/lib/rabbitmq
         resources:
           requests:
             memory: "512Mi"

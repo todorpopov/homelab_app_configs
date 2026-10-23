@@ -17,7 +17,6 @@ All manifests are configured to personal needs and do not represent a generic so
   - `grafana.yaml` - Grafana dashboards and visualization
   - `kube-state-metrics.yaml` - Kubernetes cluster metrics
 - **node-exporter/** - System-level metrics collection
-- **metrics-server/** - Kubernetes metrics API
 
 ### Logging & Analytics
 
@@ -59,7 +58,6 @@ These services are used for application development and testing.
 ├── dependencies/
 ├── elastic-stack/
 ├── homepage/
-├── metrics-server/
 ├── ministack/
 ├── node-exporter/
 ├── paperless/
