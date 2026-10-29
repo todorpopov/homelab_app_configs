@@ -1,11 +1,11 @@
-# GitHub Copilot Instructions
+# AGENTS.md
 
-# Overview
+## Overview
 
 This repository contains Kubernetes manifests for various applications and services
 deployed to a "homelab" cluster.
 
-# Directory structure
+## Directory structure
 
 Applications are deployed with a single manifest and are separated in directories based on their respective applications.
 
@@ -44,11 +44,10 @@ For example:
 - ./registry
   - registry.yaml: Kubernetes manifest for the Docker Registry application. Used to store and manage local Docker images.
 
-
-# Instructions
+## Instructions
 
 1. Ensure that all Kubernetes manifests are placed in their respective application directories.
 2. Follow the naming convention `<application>.yaml` for all manifest files.
 3. Ensure all deployments have configured resource requests and limits for CPU and memory.
 4. Update the root README file to reflect any changes in the directory structure or newly added applications.
-5. Update this instructions file whenever new applications or services are added to the repository.
+5. Update this `AGENTS.md` file whenever new applications or services are added to the repository.
