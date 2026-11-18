@@ -95,12 +95,18 @@ spec:
             httpGet:
               path: /
               port: 8000
+              httpHeaders:
+                - name: Host
+                  value: paperless.tpopov-homelab.duckdns.org
             initialDelaySeconds: 30
             periodSeconds: 15
           livenessProbe:
             httpGet:
               path: /
               port: 8000
+              httpHeaders:
+                - name: Host
+                  value: paperless.tpopov-homelab.duckdns.org
             initialDelaySeconds: 90
             periodSeconds: 30
           volumeMounts:
